@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "AnthroProject",
+  "short_name": "AnthroProject",
+  "version": "io.cordova.hellocordova",
+  "description": "A small app for managing software development projects tailored for teams with a varied skillset.",
+  "author": "Anthro Team",
+  "icons": [],
+  "start_url": "index.html"
+}
