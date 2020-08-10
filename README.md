@@ -8,7 +8,7 @@ This project was made as part of the Project Management class (410-654-FD) at CÃ
 npm run build
 cordova build android
 ```
-After this, a .apk installation file should be in C:\Users\Mr_Marcoux\Downloads\AnthroProject\platforms\android\app\build\outputs\apk in the debug or the release folder.
+After this, a .apk installation file should be in  ```platforms\android\app\build\outputs\apk``` in the debug or the release folder.
 
 ## To build and run the project in browser:
 ``` bash
