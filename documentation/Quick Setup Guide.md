@@ -50,5 +50,7 @@ After all this, you should be good to go. To start and build the project, you ca
 
 # Sources used to initiate the setup
 https://blog.theodo.com/2019/11/integrate-typescript-with-vue/
+
 https://medium.com/@valeriocapogna/how-to-setup-a-cordova-app-using-vue-js-8ba1315b9666
+
 https://blog.pusher.com/how-to-build-an-android-app-using-cordova-and-vue-js/
