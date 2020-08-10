@@ -1,9 +1,29 @@
-# anthro-project
+# AnthroProject
+This project is a small Web App compatible with Android meant to facilitate software project management within development teams. It keeps track of developper's skillsets through profile sheets and facilitates task assignation using those entered skillsets. As a project management application, it is also possible to create, delete and modify various tasks. When it comes to visualisation, a Gantt diagram and a task list will be available.
 
-> A Vue.js project
+This project was made as part of the Project Management class (410-654-FD) at Cégep à Distance.
 
-## Build Setup
+## To build the project in android:
+``` bash
+npm run build
+cordova build android
+```
+After this, a .apk installation file should be in C:\Users\Mr_Marcoux\Downloads\AnthroProject\platforms\android\app\build\outputs\apk in the debug or the release folder.
 
+## To build and run the project in browser:
+``` bash
+npm run build
+cordova build browser
+cordova run browser
+```
+Alternatively, it's possible to simply run the command
+
+``` bash
+npm start
+```
+
+
+## Useful npm commands:
 ``` bash
 # install dependencies
 npm install
@@ -26,5 +46,3 @@ npm run e2e
 # run all tests
 npm test
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
