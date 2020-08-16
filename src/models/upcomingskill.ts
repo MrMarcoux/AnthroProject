@@ -18,7 +18,7 @@ export class UpcomingSkill extends Skill {
     /**
      * @returns true if the skill is aquired
      */
-    isAcquierd() : boolean{
+    isAcquired() : boolean{
 
         const today = new Date();
         
