@@ -2,7 +2,7 @@
 <widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AnthroProject</name>
     <description>
-        A small app for managing software development projects tailored for teams with a varied skillset. 
+        A small app for managing software development teams and task assignation during projects. 
     </description>
     <author email="" href="">
         Anthro Team

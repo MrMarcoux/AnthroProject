@@ -94,8 +94,8 @@
   ],
   "cordova": {
     "platforms": [
-      "android",
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }

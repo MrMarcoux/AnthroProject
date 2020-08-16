@@ -82,7 +82,7 @@ Task *-- Task : 0..*
 Task *--o Member: 0..*
 Task --> Project
 Project *-- Tasks: 0..*
-Project *-- team: 1
+Project *-- Team: 1
 Task o-- Skill: 0..*
 Member o-- Skill: 0..*
 Member o-- UpcomingSkill: 0..*
