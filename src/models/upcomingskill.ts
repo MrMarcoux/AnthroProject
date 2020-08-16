@@ -22,10 +22,7 @@ export class UpcomingSkill extends Skill {
 
         const today = new Date();
         
-        if(this.aquisitionDate.getTime() <= today.getTime()){
-            return true;
-        }
-        return false;
+        return (this.aquisitionDate.getTime() <= today.getTime());
     }
 
     /**setter */
