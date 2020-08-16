@@ -5,6 +5,7 @@ import { Skill } from './skill';
 import { Team } from './team';
 
 export class Member {
+    readonly uuid: string;
     name: string;
     description: string;
     colorCode: string;
@@ -15,9 +16,10 @@ export class Member {
     skills: Skill[];
     upcomingSkills: UpcomingSkill[];
 
-    constructor(name: string, description: string, colorCode: string, 
+    constructor(uuid: string, name: string, description: string, colorCode: string, 
                 availableWeeklyHours: number, availableDailyHours: number,
-                skills: Skill[], upcomingSkills: UpcomingSkill[],) {
+                skills: Skill[], upcomingSkills: UpcomingSkill[]) {
+        this.uuid = uuid;
         this.name = name;
         this.description = description;
         this.colorCode = colorCode;
@@ -48,6 +50,10 @@ export class Member {
         }
     }
 
+    public addSkills(skills: Skill[]) {
+        skills.forEach(skill => this.addSkill(skill));
+    }
+
     public addUpcomingSkill(skill: UpcomingSkill) {
         if (skill.isAcquired()) {
             this.addSkill(skill);
@@ -57,5 +63,9 @@ export class Member {
         if (!this.upcomingSkills.includes(skill)) {
             this.upcomingSkills.push(skill);
         }        
-    }    
+    }
+    
+    public addUpcomingSkills(skills: UpcomingSkill[]) {
+        skills.forEach(skill => this.addUpcomingSkill(skill));
+    }
 }
