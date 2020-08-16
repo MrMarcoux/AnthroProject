@@ -20,4 +20,11 @@ export class Project {
         this.tasks = [];
         this.outsiders = []; 
     }
+
+    public addTask(task: Task) {
+        if (!this.tasks.includes(task)) {
+            task.project = this;
+            this.tasks.push(task);
+        }
+    }
 }

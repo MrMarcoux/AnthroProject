@@ -25,8 +25,15 @@ export class Model {
         return new Model();
     }
 
-    public deleteSkill(name: string) {
+    public deleteSkill(name: string) {        
+        //TODO: Clear the skill from all tasks        
+        if (!this.availableSkills.includes(name)) {
+            return;
+        }
+
         this.availableSkills = this.availableSkills.filter(skillName => skillName !== name);
+        this.members.forEach(member => member.removeSkill(name));
+        //this.projects.flatMap(project => project.tasks).removeSkill(name);
     }
     
     public deleteSkills(names: string[]) {

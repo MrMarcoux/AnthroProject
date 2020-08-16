@@ -139,3 +139,29 @@ describe('Adding upcoming skills ', () => {
         expect(currentLength).toEqual((previousLength + addedSkills.length) - 1);
     })
 });
+
+describe('Remove skill ', () => {
+    it('should remove corresponding skill', () => {    
+        let futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 5);
+        const undesirableSkillName = "Deleted";
+
+        const skills = [new Skill('Existing', 5),
+                        new Skill('Existing', 5),
+                        new Skill(undesirableSkillName, 5)];
+
+        const upcomingSkills = [new UpcomingSkill('Existing', 5, futureDate),
+                                new UpcomingSkill('Existing', 5, futureDate),
+                                new UpcomingSkill(undesirableSkillName, 5, futureDate)];
+
+        const member = new Member(uuid(), 'Dummy','','FFFFFF', 5, 5, skills, upcomingSkills);
+        
+        let previousLength = member.upcomingSkills.length;
+        let previousUpcomingLength = member.upcomingSkills.length;        
+        member.removeSkill(undesirableSkillName);
+        let currentLength = member.upcomingSkills.length;
+        let currentUpcomingLength = member.upcomingSkills.length;        
+        expect(previousLength).toBeGreaterThan(currentLength);
+        expect(previousUpcomingLength).toBeGreaterThan(currentUpcomingLength);
+    })
+});
