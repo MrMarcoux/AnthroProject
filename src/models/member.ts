@@ -29,7 +29,7 @@ export class Member {
         this.teams = [];
         this.skills = skills;
         this.upcomingSkills = upcomingSkills;            
-    }
+    }    
 
     public refreshSkills() {
         this.upcomingSkills.filter(skill => skill.isAcquired())
@@ -72,5 +72,15 @@ export class Member {
     public removeSkill(name: string) {
         this.skills = this.skills.filter(skill => skill.name !== name);
         this.upcomingSkills = this.upcomingSkills.filter(skill => skill.name !== name);
+    }
+
+    public addToTeam(team: Team) {
+        if (this.teams.includes(team)) {
+            return;
+        }
+
+        this.teams.push(team);
+
+        team.addMember(this);
     }
 }

@@ -22,10 +22,21 @@ export class Team {
 
         this.members.push(member);
 
+        member.addToTeam(this);
+
         return true;
     }
 
     public addMembers(members: Member[]) {
         members.forEach(member => this.addMember(member));
+    }
+
+    public removeMember(member: Member): boolean {
+        if (this.members.includes(member)) {
+            this.members = this.members.filter(m => m !== member);
+            return true;
+        }
+
+        return false;
     }
 }

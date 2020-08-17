@@ -25,9 +25,4 @@ export class UpcomingSkill extends Skill {
         return (this.aquisitionDate.getTime() <= today.getTime());
     }
 
-    /**setter */
-    public setAquisitionDate(date : Date){
-        this.aquisitionDate = date;
-    }
-
 }
