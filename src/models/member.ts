@@ -74,6 +74,10 @@ export class Member {
         this.upcomingSkills = this.upcomingSkills.filter(skill => skill.name !== name);
     }
 
+    public renameSkill(oldName: string, newName: string) {
+        this.skills.filter(skill => skill.name == oldName).forEach(skill => skill.name = newName);
+    }
+
     public addToTeam(team: Team) {
         if (this.teams.includes(team)) {
             return;

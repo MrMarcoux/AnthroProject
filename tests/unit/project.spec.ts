@@ -5,9 +5,9 @@ import { Task } from '@/models/task';
 describe('Adding task ', () => {
     it('should enlarge task list', () => {
         const project = new Project(uuid(), 'dummy', '','FFFFFF');
-        const persistentTask = new Task('Persistent', '', project, new Date(), new Date(), 60);
-        const taskList = [new Task('New', '', project, new Date(), new Date(), 60),
-                          new Task('New', '', project, new Date(), new Date(), 60)];
+        const persistentTask = new Task('Persistent', '', new Date(), new Date(), 60, project);
+        const taskList = [new Task('New', '', new Date(), new Date(), 60, project),
+                          new Task('New', '', new Date(), new Date(), 60, project)];
 
         project.tasks = taskList;
 
@@ -18,9 +18,9 @@ describe('Adding task ', () => {
     }),
     it('should not enlarge task list', () => {    
         const project = new Project(uuid(), 'dummy', '','FFFFFF');
-        const persistentTask = new Task('Persistent', '', project, new Date(), new Date(), 60);
-        const taskList = [new Task('New', '', project, new Date(), new Date(), 60),
-                          new Task('New', '', project, new Date(), new Date(), 60),
+        const persistentTask = new Task('Persistent', '', new Date(), new Date(), 60, project);
+        const taskList = [new Task('New', '', new Date(), new Date(), 60, project),
+                          new Task('New', '', new Date(), new Date(), 60, project),
                           persistentTask];
 
         project.tasks = taskList;

@@ -15,7 +15,7 @@ export class Team {
         this.members = [];
     }
 
-    public addMember(member: Member) : boolean {
+    public addMember(member: Member): boolean {
         if (this.members.includes(member)) {
             return false;
         }

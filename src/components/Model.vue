@@ -13,7 +13,7 @@
           <a class="nav-link" v-on:click="switchView('members')" id="membersTab" href="#">Members</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" v-on:click="switchView('availableSkills')" id="availableSkillsTab" style="color: inherit;">Available skills</a>
+          <a class="nav-link" v-on:click="switchView('availableSkills')" id="availableSkillsTab" href="#">Available skills</a>
         </li>
       </ul>
       <div v-show="activeSection == 'projects'">
@@ -36,32 +36,238 @@
                 </router-link>
             </a>
           </div>
+          <br>
+          <br>
+          <button type="button" class="btn btn-info btn-lg">
+          <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/new_project'">
+            <span>
+             <b>+</b> <span class="hidden-btn-message"> Create a new project </span>
+            </span>
+          </router-link>
+        </button>
       </div>
       <div v-show="activeSection == 'teams'">
-          content
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start model-elem" v-bind:style="`border-left-color: #${ team.colorCode };`" v-for="team in this.$store.state.model.teams" :key="team.uuid">
+                <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/teams/' + team.uuid">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 model-elem-title"><b> {{ team.name }} </b></h5>                        
+                        <small> {{ team.members.length }} members </small>
+                    </div>
+                    <br>
+                    <div class="d-flex w-100 justify-content-between"> {{ team.description }} </div>
+                    <br>                    
+                </router-link>
+            </a>
+          </div>
+          <br>
+          <br>
+          <button type="button" class="btn btn-info btn-lg">
+          <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/new_team'">
+            <span>
+             <b>+</b> <span class="hidden-btn-message"> Create a new team </span>
+            </span>
+          </router-link>
+        </button>
       </div>
       <div v-show="activeSection == 'members'">
-          meme
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start model-elem" v-bind:style="`border-left-color: #${ member.colorCode };`" v-for="member in this.$store.state.model.members" :key="member.uuid">
+                <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/members/' + member.uuid">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 model-elem-title"><b> {{ member.name }} </b></h5>                        
+                        <small> {{ member.getCurrentSkills().length }} skills </small>
+                    </div>
+                    <br>
+                    <div class="d-flex w-100 justify-content-between"> {{ member.description }} </div>
+                    <br>
+                </router-link>
+            </a>
+          </div>
+          <br>
+          <br>
+          <button type="button" class="btn btn-info btn-lg">
+          <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/new_member'">
+            <span>
+             <b>+</b> <span class="hidden-btn-message"> Create a new member sheet </span>
+            </span>
+          </router-link>
+          </button>
       </div>
       <div v-show="activeSection == 'availableSkills'">
-          content
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item model-skill d-flex justify-content-between" v-for="availableSkill in this.$store.state.model.availableSkills" :key="availableSkill">              
+              <div class="model-skill-name" v-on:click="editSkillWindow(availableSkill)"> {{ availableSkill }} </div>
+              <div class="model-skill-icons">
+                <span class="model-skill-icon" title="Edit this skill name">
+                  <font-awesome-icon v-on:click="editSkillWindow(availableSkill)" :icon="['fas', 'pen']" /> 
+                </span>
+                <span class="model-skill-icon" title="Delete this skill">
+                  <font-awesome-icon v-on:click="deleteSkillWindow(availableSkill)" :icon="['fas', 'trash']" />
+                </span>
+              </div>
+            </li>
+          </ul>
+          <br>
+          <br>
+          <button type="button" class="btn btn-info btn-lg" v-on:click="newSkillWindow()">
+            <span>
+              <b>+</b> 
+              <span class="hidden-btn-message"> Create a new skill </span>
+            </span>
+          </button>
+      </div>
+    </div>
+    <div class="modal fade" id="editSkillWindow" tabindex="-1" role="dialog" aria-labelledby="editSkillWindowCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> Edit skill name </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" id="skillNameEdit" placeholder="Enter skill name" :value="focusedSkill">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            <button type="button" class="btn btn-primary" v-on:click="applySkillNameChange()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="newSkillWindow" tabindex="-1" role="dialog" aria-labelledby="newSkillWindowCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> Enter the new skill name </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" id="skillNameCreation" placeholder="Enter skill name">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            <button type="button" class="btn btn-primary" v-on:click="applySkillCreation()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="deleteSkillWindow" tabindex="-1" role="dialog" aria-labelledby="deleteWindowCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> Are you sure you want to delete this skill? </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <font-awesome-icon :icon="['fas', 'minus-circle']" class="fa-10x" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            <button type="button" class="btn btn-danger" v-on:click="applySkillDeletion()">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="errorWindow" tabindex="-1" role="dialog" aria-labelledby="errorWindowWindowCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> Error </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+            An error occured for the following reason:
+            {{ errorMessage }}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+import $ from 'jquery';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as bootstrap from 'bootstrap';
 
 @Component
 export default class Initialization extends Vue {
 
   readonly sections = ['projects', 'teams', 'members', 'availableSkills'];
   activeSection: string;
+  focusedSkill: string;
+  errorMessage: string;
 
   constructor() {
     super();
     this.activeSection = this.sections[0];
+    this.focusedSkill = "";
+    this.errorMessage = "";
+  }
+
+  deleteSkillWindow(skillName: string) {
+    this.focusedSkill = skillName;
+    $('#deleteSkillWindow').modal('show');    
+    $('#editSkillWindow').modal('hide');
+  }
+
+  editSkillWindow(skillName: string) {
+    this.focusedSkill = skillName;
+    $('#editSkillWindow').modal('show');
+  }
+
+  newSkillWindow() {
+    $('#newSkillWindow').modal('show');
+  }
+
+  applySkillCreation() {
+    $('#newSkillWindow').modal('hide');
+    const skillName = $('#skillNameCreation').val();
+
+    try {
+      this.$store.state.model.addSkill(skillName);
+    } catch (Error) {
+      this.errorMessage = Error.message;
+      $('#errorWindow').modal('show');
+    }
+  }
+
+  applySkillNameChange() {
+    $('#editSkillWindow').modal('hide');
+    const newSkillName = $('#skillNameEdit').val();
+
+    try {
+      this.$store.state.model.modifySkillName(this.focusedSkill, newSkillName);
+    } catch (Error) {
+      this.errorMessage = Error.message;
+      $('#errorWindow').modal('show');
+    }
+  }
+
+  applySkillDeletion() {
+    $('#deleteSkillWindow').modal('hide');
+
+    try {
+      this.$store.state.model.deleteSkill(this.focusedSkill);
+    } catch (Error) {
+      this.errorMessage = Error.message;
+      $('#errorWindow').modal('show');
+    }
   }
 
   setAllUnactive() {
@@ -102,5 +308,48 @@ export default class Initialization extends Vue {
 .model-elem:hover .model-elem-title, .model-elem.hover .model-elem-title {
      text-decoration: underline;
 }
+
+.model-skill {
+    transition: 0.3s;
+    border-left-width: 1em;
+}
+
+.model-skill:hover {
+  padding: 1em;
+  font-size: 125%;
+}
+
+.model-skill:hover .model-skill-icons, .model-skill.hover .model-skill-icons {
+     visibility: visible;
+}
+
+.model-skill-icons {
+  visibility: hidden;
+  transition: 0.2s;
+}
+
+.model-skill-icon {
+  padding: 1em;
+}
+
+.model-skill-name:hover {
+  cursor: pointer;
+}
+
+.model-skill-icon:hover {
+  cursor: pointer;
+  opacity: 75%;
+}
+
+button:hover .hidden-btn-message, button.hover .hidden-btn-message {
+  visibility: visible;
+  display: inline;
+}
+
+.hidden-btn-message {
+  visibility: hidden;
+  display: none;
+}
+
 
 </style>
