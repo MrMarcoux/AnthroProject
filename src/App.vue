@@ -1,16 +1,32 @@
 <template>
   <div id="app">
-    <div id="nav">      
+    <div v-show="this.$store.state.initialized">
+      <router-view/>
+    </div>
+    <div v-show="!this.$store.state.initialized">
+      <Initialization/>
+    </div>
+    <!-- TODO: Delete when done with -->
+    <!--div id="nav">      
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    </div-->
   </div>
 </template>
 
 <script>
+import Initialization from '@/components/Initialization.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      initialized: this.$store.state.initialized
+    }
+  },
+  components: {
+    Initialization
+  }
 }
 </script>
 

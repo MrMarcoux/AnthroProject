@@ -4,24 +4,24 @@ import { Member } from './member';
 import { UpcomingSkill } from './upcomingSkill';
 
 export class Task {
-    name : string;
-    description : string;
+    name: string;
+    description: string;
     
-    subTasks : Task[];  
-    project : Project;
-    predecessors : Task[];
-    successors : Task[];
+    subTasks: Task[];  
+    project?: Project;
+    predecessors: Task[];
+    successors: Task[];
 
-    start : Date;
-    end : Date;
-    duration : number;
-    completed : boolean;
+    start: Date;
+    end: Date;
+    duration: number;
+    completed: boolean;
     
-    private assignedMembers : Member[];
-    private requiredSkills : Skill[];
+    private assignedMembers: Member[];
+    private requiredSkills: Skill[];
 
 
-    constructor(name : string,description : string, project : Project, start : Date, end : Date, durationMin : number){
+    constructor(name: string,description: string, start: Date, end: Date, durationMin: number, project?: Project){
         this.name = name;
         this.description = description;
 
@@ -39,43 +39,43 @@ export class Task {
         this.requiredSkills = [];
     }
 
-    getRequierdSkill() : Skill[]{
+    getRequierdSkill(): Skill[]{
         return this.requiredSkills;
     }
 
-    isMemberQualifed(member : Member) : boolean{
+    isMemberQualifed(member: Member): boolean{
         return (this.missingSkillsForMember(member).length > 0);
     }
 
-    missingSkillsForMember(member : Member) : string[]{
+    missingSkillsForMember(member: Member): string[]{
         return this.requiredSkills.filter(skill => !member.getCurrentSkills().includes(skill))
                                   .map(skill => skill.name);
 
     }
 
-    qualificationDateForMember(member : Member) : Date{
+    qualificationDateForMember(member: Member): Date{
         
-        let lastSkillNessesary = this.findLastAquiredSkill(member.upcomingSkills);
+        const lastSkillNessesary = this.findLastAquiredSkill(member.upcomingSkills);
 
         return lastSkillNessesary.aquisitionDate;
     }
 
-    findLastAquiredSkill(upcomingSkills : UpcomingSkill[]) : UpcomingSkill{
+    findLastAquiredSkill(upcomingSkills: UpcomingSkill[]): UpcomingSkill{
 
-        let dateArray = upcomingSkills.map(upcomingSkills => upcomingSkills.getAquisitionDate().getTime());
+        const dateArray = upcomingSkills.map(upcomingSkills => upcomingSkills.getAquisitionDate().getTime());
 
-        let lastDate = Math.max(...dateArray);
-        let indexLastDate = dateArray.indexOf(lastDate);
+        const lastDate = Math.max(...dateArray);
+        const indexLastDate = dateArray.indexOf(lastDate);
 
         return upcomingSkills[indexLastDate];
 
     }
 
-    isAssigned() : boolean{
+    isAssigned(): boolean{
         return (this.assignedMembers.length > 0);
     }
 
-    tryAssignMember(member : Member){
+    tryAssignMember(member: Member){
 
         if(this.assignedMembers.includes(member)) {throw new Error("the member is already here");}
         if(!this.isMemberQualifed(member)){throw new Error("the member is not qualified");}
@@ -84,18 +84,18 @@ export class Task {
 
     }
 
-    forceAssignMember(member : Member){
+    forceAssignMember(member: Member){
 
         if(this.assignedMembers.includes(member)) {throw new Error("the member is already here");}
 
         this.assignedMembers.push(member);
     }
 
-    getAssignedMember() : Member[]{
+    getAssignedMember(): Member[]{
         return this.assignedMembers;
     }
 
-    isLate() : boolean{
+    isLate(): boolean{
         return (this.end < new Date());    
     }
 
@@ -105,7 +105,7 @@ export class Task {
      * 
      * @returns false if the task is already in the subTask array 
      */
-    addSubTask(task : Task) : boolean{
+    addSubTask(task: Task): boolean{
 
         if(this.subTasks.includes(task)){return false}
 

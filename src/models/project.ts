@@ -27,4 +27,24 @@ export class Project {
             this.tasks.push(task);
         }
     }
+
+    public addTasks(tasks: Task[]) {
+        tasks.forEach(task => this.addTask(task));
+    }
+
+    public doneTasks(): Task[] {
+        return this.tasks.filter(task => task.completed);
+    }
+
+    public leftTasks(): Task[] {
+        return this.tasks.filter(task => !task.completed);
+    }
+
+    public completionRatio(): number {
+        if (this.leftTasks().length == 0) {
+            return 1;
+        }
+
+        return parseFloat((this.doneTasks().length/this.tasks.length).toFixed(2));
+    }
 }
