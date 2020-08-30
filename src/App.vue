@@ -6,11 +6,6 @@
     <div v-show="!this.$store.state.initialized">
       <Initialization/>
     </div>
-    <!-- TODO: Delete when done with -->
-    <!--div id="nav">      
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div-->
   </div>
 </template>
 

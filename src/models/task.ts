@@ -2,6 +2,7 @@ import { Project } from './project';
 import { Skill } from './skill';
 import { Member } from './member';
 import { UpcomingSkill } from './upcomingSkill';
+import { Team } from './team';
 
 export class Task {
     name: string;
@@ -114,5 +115,13 @@ export class Task {
         return true;
     }
 
+    removeTeamMembers(team: Team) {
+        this.assignedMembers = this.assignedMembers.filter(member => !team.members.includes(member))
+        this.subTasks.forEach(task => task.removeTeamMembers(team));    
+    }
 
+    removeMember(member: Member) {
+        this.assignedMembers = this.assignedMembers.filter(mbr => mbr !== member);
+        this.subTasks.forEach(task => task.removeMember(member));
+    }
 }
