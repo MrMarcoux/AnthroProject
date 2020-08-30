@@ -18,7 +18,7 @@ export class Project {
         this.description = description;
         this.colorCode = colorCode;
         this.tasks = [];
-        this.outsiders = []; 
+        this.outsiders = [];
     }
 
     public addTask(task: Task) {
@@ -46,5 +46,28 @@ export class Project {
         }
 
         return parseFloat((this.doneTasks().length/this.tasks.length).toFixed(2));
+    }
+
+    public hasTeam(): boolean {
+        return this.team !== null && this.team !== undefined;
+    }
+
+    public clearTeam() {
+        if (!this.hasTeam()) {
+            return;
+        }
+
+        this.tasks.forEach(task => task.removeTeamMembers(this.team as Team));
+        this.team = undefined;
+    }
+
+    public removeOutsider(member: Member) {
+        this.outsiders = this.outsiders.filter(outsider => outsider !== member);
+
+        if (this.team?.members.includes(member)) {
+            return;
+        }
+
+        this.tasks.forEach(task => task.removeMember(member));
     }
 }

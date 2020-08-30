@@ -3,7 +3,6 @@ import { Project } from './project';
 import { Team } from './team';
 import { uuid } from 'uuidv4';
 import { Task } from './task';
-import { readyException } from 'jquery';
 
 export class Model {
     projects: Project[];
@@ -47,8 +46,9 @@ export class Model {
                         new Member(uuid(), 'Re', 'woops', '000000', 5,5,[],[]),
                         new Member(uuid(), 'Mi', 'woops', '000000', 5,5,[],[])];
         model.availableSkills = ["C++", "C#", "Rust", "Assembly"];
-        const project = new Project(uuid(), 'project 1', ' Lorem ipsum dolor sit amet', '000000'); 
-        project.addTasks(tasks);                       
+        const project = new Project(uuid(), 'project 1', ' Lorem ipsum dolor sit amet', '000000');
+        project.addTasks(tasks);
+        project.outsiders = model.members;
         model.projects.push(project);
         model.projects.push(new Project(uuid(), 'project 2', ' Lorem ipsum dolor sit amet', 'FF00FF'));
         model.projects.push(new Project(uuid(), 'project 3', ' oof', '00FFFF'));
