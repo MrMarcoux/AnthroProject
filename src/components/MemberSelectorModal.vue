@@ -22,7 +22,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clear()"> Dismiss </button>
-            <button type="button" class="btn btn-primary" v-on:click="confirmSelection()" data-dismiss="modal"> Confirm </button>
+            <button type="button" class="btn btn-info" v-on:click="confirmSelection()" data-dismiss="modal"> Confirm </button>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@ import * as bootstrap from 'bootstrap';
 
 @Component
 export default class MemberSelectorModal extends Vue {
-  @Prop({type: Object as () => string})
+  @Prop({type: Object as () => MemberModel[]})
   public members!: MemberModel[];
   selectedMembers: MemberModel[];
 
@@ -81,18 +81,6 @@ export default class MemberSelectorModal extends Vue {
 </script>
 
 <style scoped>
-/*
-.member-name {
-    transition: 0.3s;
-    border-left-width: 1em;
-    border-left-color: white;
-}
-
-.member-name:hover {
-  padding: 1em;
-  cursor: pointer;
-}*/
-
 .checked {
     background-color: black;
 }

@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(fab, fas, far);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-
 Vue.config.productionTip = false
 
 new Vue({

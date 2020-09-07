@@ -3,6 +3,8 @@ import { Project } from './project';
 import { Team } from './team';
 import { uuid } from 'uuidv4';
 import { Task } from './task';
+import { Skill } from './skill';
+import { UpcomingSkill } from './upcomingskill';
 
 export class Model {
     projects: Project[];
@@ -33,10 +35,20 @@ export class Model {
         const model = new Model();
         model.name = file.name;
 
-        //TODO: Replace dummy value with real deserialized values
-        const tasks = [new Task('task 1', 'write me', new Date(), new Date(), 5),
-                       new Task('task 2', 'write me', new Date(), new Date(), 5),
-                       new Task('task 3', 'write me', new Date(), new Date(), 5)];
+        //TODO: Replace dummy values with real deserialized values    
+        const tasks = [new Task(uuid(), 'task 1', 'write me', new Date(), new Date(), 5),
+                       new Task(uuid(), 'task 2', 'write me', new Date(), new Date(), 5),
+                       new Task(uuid(), 'task 3', 'write me', new Date(), new Date(), 5)];
+
+        tasks[0].subTasks = [new Task(uuid(), 'task 4', 'write me', new Date(), new Date(), 5),
+                          new Task(uuid(), 'task 5', 'write me', new Date(), new Date(), 5),
+                          new Task(uuid(), 'task 6', 'write me', new Date(), new Date(), 5)];
+
+        tasks[0].requiredSkills.push(new Skill('C++', 5));
+        tasks[0].requiredSkills.push(new Skill('C#', 5));
+        tasks[0].requiredSkills.push(new Skill('Assembly', 5));
+        tasks[0].requiredSkills.push(new Skill('Rust', 5));
+        
         tasks[0].completed = true;
         model.teams = [new Team(uuid(), 'team 1', 'FF80F9', 'Lorem ipsum dolor sit amet'),
                        new Team(uuid(), 'team 2', '0080F9', 'Lorem ipsum dolor sit amet'),
@@ -45,6 +57,26 @@ export class Model {
         model.members = [new Member(uuid(), 'Do', 'woops', '000000', 5,5,[],[]),
                         new Member(uuid(), 'Re', 'woops', '000000', 5,5,[],[]),
                         new Member(uuid(), 'Mi', 'woops', '000000', 5,5,[],[])];
+        
+        //Member with all the skills to do the first task
+        model.members[0].skills.push(new Skill('C++', 5));
+        model.members[0].skills.push(new Skill('C#', 5));
+        model.members[0].skills.push(new Skill('Assembly', 5));
+        model.members[0].skills.push(new Skill('Rust', 5));
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 5);
+
+        //Member with only upcoming skills
+        model.members[1].upcomingSkills.push(new UpcomingSkill('C++', 5, futureDate));
+        model.members[1].upcomingSkills.push(new UpcomingSkill('C#', 5, futureDate));
+        model.members[1].upcomingSkills.push(new UpcomingSkill('Assembly', 5, futureDate));
+        model.members[1].upcomingSkills.push(new UpcomingSkill('Rust', 5, futureDate));
+
+        //Member with missing and upcoming skills
+        model.members[2].upcomingSkills.push(new UpcomingSkill('C#', 5, futureDate));
+        model.members[2].upcomingSkills.push(new UpcomingSkill('Assembly', 4, futureDate));
+        model.members[2].skills.push(new Skill('Rust', 4));
+
         model.availableSkills = ["C++", "C#", "Rust", "Assembly"];
         const project = new Project(uuid(), 'project 1', ' Lorem ipsum dolor sit amet', '000000');
         project.addTasks(tasks);
