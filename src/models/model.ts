@@ -58,6 +58,8 @@ export class Model {
                         new Member(uuid(), 'Re', 'woops', '000000', 5,5,[],[]),
                         new Member(uuid(), 'Mi', 'woops', '000000', 5,5,[],[])];
         
+        model.teams[0].members = model.members;
+
         //Member with all the skills to do the first task
         model.members[0].skills.push(new Skill('C++', 5));
         model.members[0].skills.push(new Skill('C#', 5));
@@ -154,5 +156,15 @@ export class Model {
 
     removeMembers(members: Member[]) {
         members.forEach(member => this.removeMember(member));
+    }
+
+    removeTeam(team: Team) {
+        for (const project of this.projects) {
+            if (project.team === team) {
+                project.team = team;
+            }
+        }
+
+        this.teams = this.teams.filter(t => t !== team);
     }
 }

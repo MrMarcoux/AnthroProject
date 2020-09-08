@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Model from '@/components/Model.vue'
 import Project from '../components/Project.vue'
 import Member from '@/components/Member.vue'
+import Team from '@/components/Team.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes: Array<RouteConfig> = [
     path: '/members/:uuid',
     name: 'Member',
     component: Member
+  },
+  {
+    path: '/teams/:uuid',
+    name: 'Team',
+    component: Team
   }
 ]
 

@@ -31,6 +31,7 @@ export default class Initialization extends Vue {
     fileInput.click();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   loadProjectFile(event: any) {
     this.$store.commit('loadFile', event.target.files[0]);
   }
