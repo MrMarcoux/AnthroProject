@@ -31,7 +31,7 @@
         <div class="project-header d-flex w-100 justify-content-between">
           <div class="d-flex">
             <span class="color-picker-wrap" id="colorPickerPlaceholder" :style="`background-color: #${project.colorCode}`" v-on:click="clickColor()"></span>
-            <input type="color" id="colorPicker">
+            <input type="color" :id="`colorPicker${this.project.uuid.replace('-', '')}`">
             <h1 v-on:click="editNameWindow()" class="display-3 text-left project-name" title="Edit name"> 
               {{ project.name }}
             </h1>
@@ -151,11 +151,7 @@
 
 <script lang="ts">
 /*
-
-  - task listing
-  - task editing
-  - task creation
-  - task selection menu
+TODO:
   - task deletion --> Might have to take care of inter-dependencies
 */
 import TeamSelectorModal from './TeamSelectorModal.vue';
@@ -206,7 +202,7 @@ export default class Project extends Vue {
   mounted() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const comp = this;
-    $(document).on('change', '#colorPicker', function() {
+    $(document).on('change', `#colorPicker${this.project.uuid.replace('-', '')}`, function() {
         comp.colorChanged();
     });
   }
@@ -275,14 +271,14 @@ export default class Project extends Vue {
   }
 
   clickColor() {
-    $('#colorPicker').click();
+    $(`#colorPicker${this.project.uuid.replace('-', '')}`).click();
   }
 
   colorChanged() {
-    if ($('#colorPicker').val() === undefined)
+    if ($(`#colorPicker${this.project.uuid.replace('-', '')}`).val() === undefined)
         return;
     
-    this.project.colorCode = String($('#colorPicker').val()).split('#')[1];
+    this.project.colorCode = String($(`#colorPicker${this.project.uuid.replace('-', '')}`).val()).split('#')[1];
   }
 
   newOutsiderWindow() {
@@ -420,6 +416,15 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
 .hidden-btn-message {
   visibility: hidden;
   display: none;
+}
+
+.modal-header {
+    background-color: rgb(43, 44, 44);
+    color: white;
+}
+
+.modal-header button {
+  color: white;
 }
 
 </style>

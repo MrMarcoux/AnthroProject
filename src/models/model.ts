@@ -93,9 +93,11 @@ export class Model {
         }
 
         this.availableSkills = this.availableSkills.filter(skillName => skillName !== name);
-        this.members.forEach(member => member.removeSkill(name));
-        //TODO: Clear the skill from all tasks
-        //this.projects.flatMap(project => project.tasks).removeSkill(name);
+        this.members.forEach(member => member.removeSkillFromName(name));
+
+        for (const project of this.projects) {
+            project.tasks.forEach(task => task.removeSkillFromName(name));
+        }       
     }
     
     public deleteSkills(names: string[]) {
@@ -136,7 +138,21 @@ export class Model {
 
         this.members.forEach(member => member.renameSkill(oldName, newName));
 
-        //TODO: Find and replace in every tasks
-        //this.projects.flatMap(project => project.tasks).renameSkill(oldName, newName);
+        this.projects.flatMap(project => project.tasks)
+                     .forEach(task => task.renameSkill(oldName, newName));
+    }
+
+    removeMember(member: Member) {
+        for (const project of this.projects) {
+            project.tasks.forEach(task => task.removeMember(member));
+        }
+
+        this.teams.forEach(team => team.removeMember(member));
+
+        this.members = this.members.filter(m => m !== member);
+    }
+
+    removeMembers(members: Member[]) {
+        members.forEach(member => this.removeMember(member));
     }
 }

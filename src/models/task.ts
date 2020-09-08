@@ -244,6 +244,22 @@ export class Task {
 
     removeSkill(skill: Skill) {
         this.requiredSkills = this.requiredSkills.filter(s => s !== skill);
+        this.subTasks.forEach(task => task.removeSkill(skill));
+    }
+
+    removeSkillFromName(name: string) {
+        this.requiredSkills = this.requiredSkills.filter(s => s.name !== name);
+        this.subTasks.forEach(task => task.removeSkillFromName(name));
+    }
+
+    renameSkill(oldName: string, newName: string) {
+        for (const skill of this.requiredSkills) {
+            if (skill.name === oldName) {
+                skill.name = newName;
+            }
+        }
+
+        this.subTasks.forEach(task => task.renameSkill(oldName, newName));
     }
 
     updatePredecessors(tasks: Task[]) {

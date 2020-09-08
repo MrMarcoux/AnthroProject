@@ -158,7 +158,7 @@ describe('Remove skill ', () => {
         
         let previousLength = member.upcomingSkills.length;
         let previousUpcomingLength = member.upcomingSkills.length;        
-        member.removeSkill(undesirableSkillName);
+        member.removeSkillFromName(undesirableSkillName);
         let currentLength = member.upcomingSkills.length;
         let currentUpcomingLength = member.upcomingSkills.length;        
         expect(previousLength).toBeGreaterThan(currentLength);
