@@ -200,6 +200,12 @@ export class Task {
         this.predecessors.push(task);
     }
 
+    removePredecessor(task: Task) {
+        task.successors = task.successors.filter(t => t !== this);
+
+        this.predecessors = this.predecessors.filter(t => t !== task);
+    }
+
     private addSuccessor(task: Task) {
         if (this.successors.includes(task)) {
             throw new Error('Sucessors is already associated');
@@ -238,5 +244,10 @@ export class Task {
 
     removeSkill(skill: Skill) {
         this.requiredSkills = this.requiredSkills.filter(s => s !== skill);
+    }
+
+    updatePredecessors(tasks: Task[]) {
+        this.predecessors.filter(t => !tasks.includes(t)).forEach(t => this.removePredecessor(t));
+        tasks.filter(t => !this.predecessors.includes(t)).forEach(t => this.addPredecessor(t));        
     }
 }

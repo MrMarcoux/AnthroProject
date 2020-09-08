@@ -1,5 +1,5 @@
 <template>
-  <div class="task-editing cn">
+  <div v-show="this.task" class="task-editing cn">
     <div class="pre-header">
       <font-awesome-icon class="dismiss-icon icon text-left" title="Close the task menu" v-on:click="$emit('dismiss')" :icon="['fas', 'times']" />
     </div>
@@ -100,7 +100,7 @@
             <span class="hidden-btn-message"> Create a new sub-task </span>
           </span>
         </button>
-        <TaskSelectorModal ref="predecessorSelector" :project="this.task.project" v-on:task-selected="addPredecessor($event)" />
+        <TaskSelectorModal ref="predecessorSelector" :project="this.task.project" :preselected="this.task.predecessors" v-on:tasks-selected="updatePredecessors($event)" />
         
       </div>
 
@@ -171,11 +171,6 @@
 </template>
 
 <script lang="ts">
-/*
-TODOS:
-- Add predecessor selection
-
-*/
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Task as TaskModel } from '@/models/task';
 import { Skill as SkillModel, Skill } from '@/models/skill';
@@ -206,8 +201,8 @@ export default class TaskEditing extends Vue {
   activeSection: string;
 
   @Prop({type: Object as () => TaskModel})
-  public task!: TaskModel;
-  completion: number = this.task.completionPercent;
+  public task!: TaskModel | null;
+  completion: number|undefined = this.task? this.task.completionPercent : 0;
   
   constructor() {
     super();
@@ -216,13 +211,14 @@ export default class TaskEditing extends Vue {
   }
 
   mounted() {
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ($("#slider") as any).roundSlider({
       sliderType: "min-range",
       handleShape: "round",
       width: 22,
       radius: 100,
-      value: this.task.completionPercent
+      value: this.task? this.task.completionPercent : 0
     });
 
     $('.rs-inner')[0].setAttribute('style', 'background-color: rgb(43, 44, 44);');
@@ -243,12 +239,18 @@ export default class TaskEditing extends Vue {
         if (parseInt(text) === 0) {
           return;
         }
-
-        comp.task.completionPercent = parseInt(text);
+        
+        if (comp.task != null) {
+          comp.task.completionPercent = parseInt(text);
+        }        
     });
   }
 
   updated() {
+    if (this.task === null) {
+      return;
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ($("#slider") as any).roundSlider({
       value: this.task.completionPercent
@@ -256,6 +258,10 @@ export default class TaskEditing extends Vue {
   }
 
   deleteAssignee(member: MemberModel) {
+    if (this.task === null) {
+      return;
+    }
+
     this.task.removeAssignee(member);    
   }
 
@@ -266,6 +272,10 @@ export default class TaskEditing extends Vue {
   }
 
   applyDescriptionChange() {
+    if (this.task === null) {
+      return;
+    }
+
     this.task.description = (String)($('#taskDescriptionEdit').val());
   }
 
@@ -278,10 +288,18 @@ export default class TaskEditing extends Vue {
   }
 
   applyTaskNameChange() {
+    if (this.task === null) {
+      return;
+    }
+
     this.task.name = (String)($('#taskNameEdit').val());
   }
 
   changeValue(id: string) {
+    if (this.task === null) {
+      return;
+    }
+
     const newDate = new Date(Date.parse($(`#${id}`).val() as string) + 1);
     newDate.setDate(newDate.getDate() + 1);
     
@@ -315,6 +333,10 @@ export default class TaskEditing extends Vue {
   }
 
   assignableMembers() {
+    if (this.task === null) {
+      return;
+    }
+
     let assignableMembers: MemberModel[] | undefined = [];
     const teamMembers = this.task.project?.team?.members;
 
@@ -324,10 +346,14 @@ export default class TaskEditing extends Vue {
       assignableMembers = [...new Set(this.task.project?.outsiders.concat(this.task.project?.team?.members as MemberModel[]))];
     }
 
-    return assignableMembers?.filter(member => !this.task.assignees.includes(member));
+    return assignableMembers?.filter(member => !this.task?.assignees.includes(member));
   }
 
   addAssignees(members: MemberModel[]) {
+    if (this.task === null) {
+      return;
+    }
+
     this.task.tryAssignMembers(members);
   }
 
@@ -336,11 +362,11 @@ export default class TaskEditing extends Vue {
   }
 
   deleteSubTask(subtask: TaskModel) {
-    this.task.removeSubtask(subtask);
+    this.task?.removeSubtask(subtask);
   }
 
   deleteSkill(skill: SkillModel) {
-    this.task.removeSkill(skill);
+    this.task?.removeSkill(skill);
   }
 
   newSubTaskWindow() {
@@ -351,11 +377,15 @@ export default class TaskEditing extends Vue {
     (this.$refs.skillAdditor as SkillAdditionModal).show();
   }
 
-  updateSelectedSkills(skillNames: string[]) {    
+  updateSelectedSkills(skillNames: string[]) {
+    if (this.task === null) {
+      return;
+    }
+
     this.task.requiredSkills = this.task.requiredSkills.filter(skill => skillNames.includes(skill.name));
     
-    skillNames.filter(name => !this.task.requiredSkills.map(s => s.name).includes(name))
-              .forEach(name => this.task.requiredSkills.push(new Skill(name, 0)));
+    skillNames.filter(name => !this.task?.requiredSkills.map(s => s.name).includes(name))
+              .forEach(name => this.task?.requiredSkills.push(new Skill(name, 0)));
   }
 
   toggleTaskCompletion(task: TaskModel) {
@@ -363,10 +393,14 @@ export default class TaskEditing extends Vue {
   }
 
   addSubTask(subtask: TaskModel) {
-    this.task.addSubTask(subtask);
+    this.task?.addSubTask(subtask);
   }
 
   deletePredecessor(predecessor: TaskModel) {
+    if (this.task === null) {
+      return;
+    }
+
     this.task.predecessors = this.task.predecessors.filter(pre => pre != predecessor); 
   }
 
@@ -374,8 +408,8 @@ export default class TaskEditing extends Vue {
     (this.$refs.predecessorSelector as TaskSelectorModal).show();
   }
 
-  addPredecessor(predecessor: TaskModel) {
-    this.task.addPredecessor(predecessor);
+  updatePredecessors(predecessors: TaskModel[]) {
+    this.task?.updatePredecessors(predecessors);
   }
 }
 </script>

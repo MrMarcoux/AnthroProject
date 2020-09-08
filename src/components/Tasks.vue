@@ -1,10 +1,10 @@
 <template>
   <div class="tasks cn">    
-    <nav class="sidebar active">
+    <nav v-show="focusedTask != null" class="sidebar">
         <TaskEditing :task="focusedTask" v-on:dismiss="sidebarDismissed()"/>
     </nav>
     <div class="main-content">
-        <ProjectTasksList :tasks="project.tasks" v-on:task-focused="taskEditMenu($event)" />
+        <ProjectTasksList ref="taskList" :project="project" v-on:task-focused="taskEditMenu($event)" />
     </div>
   </div>
 </template>
@@ -34,20 +34,28 @@ export default class Tasks extends Vue {
   @Prop({type: Object as () => ProjectModel})
   public project!: ProjectModel;
   
-  focusedTask: TaskModel;
+  focusedTask: TaskModel | null;
 
   constructor() {
     super();
-    this.focusedTask = this.project.tasks[1];
+    this.focusedTask = null;
   }
 
   taskEditMenu(task: TaskModel) {
-    $('.sidebar').toggleClass('active');
-    this.focusedTask = task;
+    
+    if (this.focusedTask === task) {
+      (this.$refs.taskList as ProjectTasksList).resetSelection();
+      $('.sidebar').toggleClass('active');
+      (this.$refs.taskList as ProjectTasksList).resetSelection();
+    } else {
+      $('.sidebar').removeClass('active');
+      this.focusedTask = task;
+    }
   }
 
   sidebarDismissed() {
     $('.sidebar').addClass('active');
+    (this.$refs.taskList as ProjectTasksList).resetSelection();
   }
 
 }
@@ -57,7 +65,7 @@ export default class Tasks extends Vue {
 
 @media (max-width: 768px) {
     .sidebar {
-        margin-left: -75px;
+        margin-left: -250px;
         top: 0;
         left: 0;
         height: 100vh;
@@ -71,11 +79,11 @@ export default class Tasks extends Vue {
 }
 
 .sidebar.active {
-    margin-left: -250px;
+    margin-left: -450px;
 }
 
 .sidebar {
-    width: 250px;  
+    width: 450px;  
     height: 100vh;
     transition: all 0.3s;
     background-color: rgb(43, 44, 44);
@@ -88,5 +96,11 @@ export default class Tasks extends Vue {
     display: flex;
     width: 100%;
 }
+
+.main-content {
+    display: flex;
+    width: 100%;
+}
+
 
 </style>

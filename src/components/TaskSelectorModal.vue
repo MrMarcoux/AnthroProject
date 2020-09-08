@@ -14,12 +14,12 @@
                 No tasks are available for selection
             </div>
             <div>
-              <TaskListElement v-on:task-clicked="toggleSelectedTask($event)" :multiple="true" :task="task" v-for="task in this.project.tasks" :key="task" />                
+              <TaskListElement v-on:task-clicked="toggleSelectedTask($event)" :checkmarks="false" ref="taskElem" :multiple="true" :task="task" v-for="task in this.project.tasks" :key="task" />
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal"> Dismiss </button>
-            <button type="button" class="btn btn-info" v-on:click="confirmSelection()" data-dismiss="modal"> Confirm </button>
+            <button type="button" class="btn btn-info" data-dismiss="modal" v-on:click="confirmSelection"> Confirm </button>
           </div>
         </div>
       </div>
@@ -46,6 +46,9 @@ export default class TaskSelectorModal extends Vue {
   @Prop({type: Object as () => ProjectModel})
   public project!: ProjectModel;
 
+  @Prop({type: Object as () => TaskModel[]})
+  public preselected!: TaskModel[];
+
   tasks: TaskModel[];
 
   constructor() {
@@ -54,6 +57,11 @@ export default class TaskSelectorModal extends Vue {
   }
 
   public show(): void {
+    this.tasks = [];
+    this.preselected.forEach(t => this.tasks.push(t));
+    for (const elem of (this.$refs.taskElem as TaskListElement[])) {
+      elem.setActivationForMultiple(this.tasks);
+    }
     $('#selectTaskWindow').modal('show');
   }
 
@@ -62,8 +70,7 @@ export default class TaskSelectorModal extends Vue {
   }
 
   confirmSelection() {
-    //TODO: Transfer selection to thing or wathever
-    alert(this.tasks.map(task => task.name));
+    this.$emit('tasks-selected', this.tasks);
   }
 
   toggleSelectedTask(task: TaskModel) {    
