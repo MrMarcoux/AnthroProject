@@ -17,34 +17,33 @@
         </li>
       </ul>
       <div v-show="activeSection == 'projects'">
-          <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start model-elem" v-bind:style="`border-left-color: #${ project.colorCode };`" v-for="project in this.$store.state.model.projects" :key="project.uuid">
-                <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/projects/' + project.uuid">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1 model-elem-title"><b> {{ project.name }} </b></h5>                        
-                        <small> {{ project.tasks.length }} tasks </small>
-                    </div>
-                    <br>
-                    <div class="d-flex w-100 justify-content-between"> {{ project.description }} </div>
-                    <br>
-                    <small class="d-flex w-100 justify-content-between"> Completion: </small>
-                    <div class="progress justify-content-right" style="width: 200px;">
-                        <div class="progress-bar bg-info" role="progressbar" v-bind:style="`width: ${project.completionRatio() * 100}%`" aria-valuemin="0" aria-valuemax="100">  
-                            {{ project.completionRatio() * 100 }} %
-                        </div>
-                    </div>
-                </router-link>
-            </a>
-          </div>
-          <br>
-          <br>
-          <button type="button" class="btn btn-info btn-lg">
-          <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/new_project'">
-            <span>
-             <b>+</b> <span class="hidden-btn-message"> Create a new project </span>
-            </span>
-          </router-link>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start model-elem" v-bind:style="`border-left-color: #${ project.colorCode };`" v-for="project in this.$store.state.model.projects" :key="project.uuid">
+              <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/projects/' + project.uuid">
+                  <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1 model-elem-title"><b> {{ project.name }} </b></h5>                        
+                      <small> {{ project.tasks.length }} tasks </small>
+                  </div>
+                  <br>
+                  <div class="d-flex w-100 justify-content-between"> {{ project.description }} </div>
+                  <br>
+                  <small class="d-flex w-100 justify-content-between"> Completion: </small>
+                  <div class="progress justify-content-right" style="width: 200px;">
+                      <div class="progress-bar bg-info" role="progressbar" v-bind:style="`width: ${project.completionRatio() * 100}%`" aria-valuemin="0" aria-valuemax="100">  
+                          {{ project.completionRatio() * 100 }} %
+                      </div>
+                  </div>
+              </router-link>
+          </a>
+        </div>
+        <br>
+        <br>
+        <button type="button" class="btn btn-info btn-lg" v-on:click="projectCreationWindow()">
+          <span>
+            <b>+</b> <span class="hidden-btn-message"> Create a new project </span>
+          </span>
         </button>
+        <ProjectCreationModal ref="projectCreator" v-on:project-created="addProject($event)" />
       </div>
       <div v-show="activeSection == 'teams'">
         <div class="list-group">
@@ -62,13 +61,12 @@
           </div>
           <br>
           <br>
-          <button type="button" class="btn btn-info btn-lg">
-          <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/new_team'">
+          <button type="button" v-on:click="teamCreationWindow()" class="btn btn-info btn-lg">       
             <span>
              <b>+</b> <span class="hidden-btn-message"> Create a new team </span>
-            </span>
-          </router-link>
-        </button>
+            </span>      
+          </button>
+          <TeamCreationModal ref="teamCreator" v-on:team-created="addTeam($event)" />
       </div>
       <div v-show="activeSection == 'members'">
           <div class="list-group">
@@ -86,13 +84,12 @@
           </div>
           <br>
           <br>
-          <button type="button" class="btn btn-info btn-lg">
-          <router-link style="text-decoration: none; color: inherit;" v-bind:to="'/new_member'">
+          <button type="button" v-on:click="memberCreationWindow()" class="btn btn-info btn-lg">          
             <span>
-             <b>+</b> <span class="hidden-btn-message"> Create a new member sheet </span>
-            </span>
-          </router-link>
+             <b>+</b> <span class="hidden-btn-message"> Create a new member </span>
+            </span>          
           </button>
+          <MemberCreationModal ref="memberCreator" v-on:member-created="addMember($event)" />
       </div>
       <div v-show="activeSection == 'availableSkills'">
           <ul class="list-group list-group-flush">
@@ -132,7 +129,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
-            <button type="button" class="btn btn-primary" v-on:click="applySkillNameChange()">Save changes</button>
+            <button type="button" class="btn btn-info" v-on:click="applySkillNameChange()">Save changes</button>
           </div>
         </div>
       </div>
@@ -151,7 +148,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
-            <button type="button" class="btn btn-primary" v-on:click="applySkillCreation()">Save</button>
+            <button type="button" class="btn btn-info" v-on:click="applySkillCreation()">Save</button>
           </div>
         </div>
       </div>
@@ -201,11 +198,23 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import ProjectCreationModal from '@/components/ProjectCreationModal.vue';
+import MemberCreationModal from '@/components/MemberCreationModal.vue';
+import TeamCreationModal from '@/components/TeamCreationModal.vue';
+import { Project as ProjectModel } from '@/models/project';
+import { Member as MemberModel } from '@/models/member';
+import { Team as TeamModel } from '@/models/team';
 import $ from 'jquery';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as bootstrap from 'bootstrap';
 
-@Component
+@Component({
+  components: {
+    ProjectCreationModal,
+    MemberCreationModal,
+    TeamCreationModal
+  }
+})
 export default class Initialization extends Vue {
 
   readonly sections = ['projects', 'teams', 'members', 'availableSkills'];
@@ -287,7 +296,30 @@ export default class Initialization extends Vue {
     }
     this.activeSection = section;
   }
-  
+
+  projectCreationWindow() {
+    (this.$refs.projectCreator as ProjectCreationModal).show();
+  }
+
+  addProject(project: ProjectModel) {
+    this.$store.state.model.projects.push(project);
+  }
+
+  memberCreationWindow() {
+    (this.$refs.memberCreator as MemberCreationModal).show();
+  }
+
+  addMember(member: MemberModel) {
+    this.$store.state.model.members.push(member);
+  }
+
+  teamCreationWindow() {
+    (this.$refs.teamCreator as TeamCreationModal).show();
+  }
+
+  addTeam(team: TeamModel) {
+    this.$store.state.model.teams.push(team);
+  }
 }
 </script>
 

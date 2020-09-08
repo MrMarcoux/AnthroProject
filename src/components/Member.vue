@@ -298,7 +298,8 @@ input[type=color] {
   width: 85px;
   height: 85px; 
   display: inline-block;
-  margin-right: 1.5em;
+  margin-right: 1.5em;  
+  box-shadow: 2px 2px grey;
 }
 
 .color-display {

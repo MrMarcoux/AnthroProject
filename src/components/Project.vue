@@ -313,6 +313,7 @@ input[type=color] {
   height: 85px; 
   display: inline-block;
   margin-right: 1.5em;
+  box-shadow: 2px 2px grey;
 }
 
 .outsider-elem {
@@ -323,7 +324,6 @@ input[type=color] {
   border-left-width: 0.5em;
   font-size: 125%;
 }
-
 
 .color-display {
   border-radius: 50%;

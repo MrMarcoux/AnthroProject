@@ -45,12 +45,6 @@ import { uuid } from 'uuidv4';
 
 @Component
 export default class TaskCreationModal extends Vue {
-  /*@Prop({type: Object as () => string})
-  public parent!: TaskModel;
-
-  @Prop({type: Object as () => string})
-  public project!: ProjectModel;*/
-
 
   constructor() {
     super();
@@ -67,7 +61,7 @@ export default class TaskCreationModal extends Vue {
     const startDate = new Date(Date.parse($('#endDate').val() as string) + 1);
     startDate.setDate(startDate.getDate() + 1);
 
-    this.$emit('task-created', new TaskModel(uuid(), name, description, startDate, endDate, 0, undefined));
+    this.$emit('project-created', new TaskModel(uuid(), name, description, startDate, endDate, 0, undefined));
   }
 
   formattedCurrentDate(): string {
