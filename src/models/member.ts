@@ -74,6 +74,10 @@ export class Member {
         this.upcomingSkills = this.upcomingSkills.filter(skill => skill.name !== name);
     }
 
+    public removeTask(task: Task) {
+        this.tasks = this.tasks.filter(t => t.uuid !== task.uuid);
+    }
+
     public renameSkill(oldName: string, newName: string) {
         this.skills.filter(skill => skill.name == oldName).forEach(skill => skill.name = newName);
     }

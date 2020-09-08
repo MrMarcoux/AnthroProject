@@ -82,10 +82,9 @@
             <span class="hidden-btn-message"> Add a new individual member </span>
           </span>
         </button>
-
       </div>
       <div v-show="activeSection == 'tasks'">
-
+        <Tasks :project="project" />
       </div>
       <div v-show="activeSection == 'gantt'">
 
@@ -152,9 +151,6 @@
 
 <script lang="ts">
 /*
-  TODOS left:
-  
-  - create outsider window assignation
 
   - task listing
   - task editing
@@ -164,6 +160,7 @@
 */
 import TeamSelectorModal from './TeamSelectorModal.vue';
 import MemberSelectorModal from './MemberSelectorModal.vue';
+import Tasks from './Tasks.vue';
 import { Component, Vue } from 'vue-property-decorator';
 import { Project as  ProjectModel } from '@/models/project';
 import { Team as TeamModel } from '@/models/team';
@@ -175,12 +172,11 @@ import $ from 'jquery';
 import * as bootstrap from 'bootstrap';
 
 @Component({
-
   components: {
     TeamSelectorModal,
-    MemberSelectorModal
+    MemberSelectorModal,
+    Tasks
   }
-
 })
 export default class Project extends Vue {
 
@@ -200,6 +196,7 @@ export default class Project extends Vue {
     this.focusedSkill = "";
     this.errorMessage = "";
     this.project = this.$store.state.model.projects.find((proj: ProjectModel) => proj.uuid === this.$route.params.uuid);
+    //TODO: Will fail in case a team is already associated. Need to modify this.
     this.teamUuid = 'None';
     this.teamColor = '000000';
     this.teamName = '';
