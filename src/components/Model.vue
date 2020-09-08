@@ -351,5 +351,12 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
   display: none;
 }
 
+.modal-header {
+  background-color: rgb(43, 44, 44);
+  color: white;
+}
 
+.modal-header button {
+  color: white;
+}
 </style>
