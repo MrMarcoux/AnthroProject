@@ -69,9 +69,17 @@ export class Member {
         skills.forEach(skill => this.addUpcomingSkill(skill));
     }
 
-    public removeSkill(name: string) {
+    public removeSkillFromName(name: string) {
         this.skills = this.skills.filter(skill => skill.name !== name);
         this.upcomingSkills = this.upcomingSkills.filter(skill => skill.name !== name);
+    }
+
+    public removeSkill(skill: Skill) {
+        this.skills = this.skills.filter(s => skill !== s);        
+    }
+
+    public removeUpcomingSkill(skill: UpcomingSkill) {
+        this.upcomingSkills = this.upcomingSkills.filter(s => skill !== s);        
     }
 
     public removeTask(task: Task) {
