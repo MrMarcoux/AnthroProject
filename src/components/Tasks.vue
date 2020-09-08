@@ -13,7 +13,6 @@
 import TaskSelectorModal from './TaskSelectorModal.vue';
 import ProjectTasksList from './ProjectTasksList.vue';
 import TaskEditing from './TaskEditing.vue';
-import MemberSelectorModal from './MemberSelectorModal.vue';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Project as  ProjectModel} from '../models/project';
 import { Task as TaskModel } from '../models/task';
@@ -27,7 +26,6 @@ import * as bootstrap from 'bootstrap';
     TaskSelectorModal,
     ProjectTasksList,
     TaskEditing,
-    MemberSelectorModal
   }
 })
 export default class Tasks extends Vue {

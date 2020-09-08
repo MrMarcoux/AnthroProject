@@ -63,7 +63,7 @@
             </div>
           </li>
         </ul>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newSkillWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newSkillWindow()">
           <span>
             <b>+</b>
             <span class="hidden-btn-message"> Add a new skill </span>
@@ -89,7 +89,7 @@
             </div>
           </li>
         </ul>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newUpcomingSkillWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newUpcomingSkillWindow()">
           <span>
             <b>+</b>
             <span class="hidden-btn-message"> Add a new skill </span>
@@ -384,6 +384,11 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
 .hidden-btn-message {
   visibility: hidden;
   display: none;
+}
+
+.btn-create {
+  position: absolute;
+  bottom: 10px; 
 }
 
 .skill-name {

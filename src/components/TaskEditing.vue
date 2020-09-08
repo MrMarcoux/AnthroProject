@@ -40,7 +40,7 @@
         </ul>
         <hr/>
         <h4 class="sub-header text-left"> Completion (%) </h4>
-        <div class="sub-body ">
+        <div class="sub-body">
           <div id="slider"></div>
         </div>
       </div>
@@ -52,7 +52,7 @@
             <font-awesome-icon class="delete-icon icon" title="Unassign this employee" v-on:click="deleteAssignee(member)" :icon="['fas', 'trash']" />
           </li>
         </ul>        
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newAssigneeWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newAssigneeWindow()">
           <span>
             <b>+</b> 
             <span class="hidden-btn-message"> Add a new assignee </span>
@@ -73,7 +73,7 @@
             <font-awesome-icon class="delete-icon icon" title="Unassign this employee" v-on:click="deleteSubTask(subtask)" :icon="['fas', 'trash']" />
           </li>
         </ul>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newSubTaskWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newSubTaskWindow()">
           <span>
             <b>+</b>
             <span class="hidden-btn-message"> Create a new sub-task </span>
@@ -94,7 +94,7 @@
             <font-awesome-icon class="delete-icon icon" title="Unassign this employee" v-on:click="deletePredecessor(predecessor)" :icon="['fas', 'trash']" />
           </li>
         </ul>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newPredecessorWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newPredecessorWindow()">
           <span>
             <b>+</b>
             <span class="hidden-btn-message"> Create a new sub-task </span>
@@ -118,7 +118,7 @@
             </div>
           </li>
         </ul>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newSkillWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newSkillWindow()">
           <span>
             <b>+</b>
             <span class="hidden-btn-message"> Add a new required skill </span>
@@ -210,15 +210,14 @@ export default class TaskEditing extends Vue {
     
   }
 
-  mounted() {
-
+  updated() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ($("#slider") as any).roundSlider({
       sliderType: "min-range",
       handleShape: "round",
       width: 22,
       radius: 100,
-      value: this.task? this.task.completionPercent : 0
+      value:  this.task? this.task.completionPercent : 0
     });
 
     $('.rs-inner')[0].setAttribute('style', 'background-color: rgb(43, 44, 44);');
@@ -244,9 +243,7 @@ export default class TaskEditing extends Vue {
           comp.task.completionPercent = parseInt(text);
         }        
     });
-  }
 
-  updated() {
     if (this.task === null) {
       return;
     }
@@ -473,6 +470,8 @@ div.scrollmenu a:hover {
   padding: 0.75em;
   padding-top: 0;
   cursor: pointer;
+  margin: auto;
+  width: 50%;
 }
 
 .list-group-item {
@@ -486,6 +485,11 @@ input[type=date]:hover {
 button:hover .hidden-btn-message, button.hover .hidden-btn-message {
   visibility: visible;
   display: inline;
+}
+
+.btn-create {
+  position: absolute;
+  bottom: 10px; 
 }
 
 .hidden-btn-message {
@@ -551,6 +555,5 @@ input[type=number] {
   text-decoration: line-through;
   opacity: 45%;
 }
-
 
 </style>

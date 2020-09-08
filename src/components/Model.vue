@@ -38,7 +38,7 @@
         </div>
         <br>
         <br>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="projectCreationWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="projectCreationWindow()">
           <span>
             <b>+</b> <span class="hidden-btn-message"> Create a new project </span>
           </span>
@@ -61,7 +61,7 @@
           </div>
           <br>
           <br>
-          <button type="button" v-on:click="teamCreationWindow()" class="btn btn-info btn-lg">       
+          <button type="button" v-on:click="teamCreationWindow()" class="btn btn-create btn-info btn-lg">       
             <span>
              <b>+</b> <span class="hidden-btn-message"> Create a new team </span>
             </span>      
@@ -84,7 +84,7 @@
           </div>
           <br>
           <br>
-          <button type="button" v-on:click="memberCreationWindow()" class="btn btn-info btn-lg">          
+          <button type="button" v-on:click="memberCreationWindow()" class="btn btn-create btn-info btn-lg">          
             <span>
              <b>+</b> <span class="hidden-btn-message"> Create a new member </span>
             </span>          
@@ -107,7 +107,7 @@
           </ul>
           <br>
           <br>
-          <button type="button" class="btn btn-info btn-lg" v-on:click="newSkillWindow()">
+          <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newSkillWindow()">
             <span>
               <b>+</b> 
               <span class="hidden-btn-message"> Create a new skill </span>
@@ -381,6 +381,11 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
 .hidden-btn-message {
   visibility: hidden;
   display: none;
+}
+
+.btn-create {
+  position: absolute;
+  bottom: 10px; 
 }
 
 .modal-header {

@@ -2,10 +2,10 @@
   <div class="initialization cn">
     <div class="inner">
       <h2> Please choose one of those options: </h2>
-      <button v-on:click="loadProject()" type="button" class="btn btn-primary btn-lg"> Import an existing project </button>
+      <button v-on:click="loadProject()" type="button" class="btn btn-info btn-lg"> Import an existing project </button>
       <br>
       <br>
-      <button v-on:click="newProject()" type="button" class="btn btn-primary btn-lg"> Create a new project </button>
+      <button v-on:click="newProject()" type="button" class="btn btn-info btn-lg"> Create a new project </button>
       <input id="fileInput" @change="loadProjectFile" type="file" style="display: none" multiple />
     </div>
   </div>

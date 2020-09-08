@@ -56,7 +56,7 @@
             </div>
           </li>
         </ul>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newMemberWindow()">
+        <button type="button" class="btn bt-create btn-info btn-lg" v-on:click="newMemberWindow()">
           <span>
             <b>+</b>
             <span class="hidden-btn-message"> Add a new member </span>
@@ -343,6 +343,11 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
 
 .modal-header button {
   color: white;
+}
+
+.btn-create {
+  position: absolute;
+  bottom: 10px; 
 }
 
 </style>

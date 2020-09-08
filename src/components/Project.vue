@@ -76,7 +76,7 @@
           </li>
         </ul>
         <MemberSelectorModal ref="outsiderSelector" :members="selectableOutsiders()" v-on:members-selected="addOutsiders($event)"/>
-        <button type="button" class="btn btn-info btn-lg" v-on:click="newOutsiderWindow()">
+        <button type="button" class="btn btn-create btn-info btn-lg" v-on:click="newOutsiderWindow()">
           <span>
             <b>+</b> 
             <span class="hidden-btn-message"> Add a new individual member </span>
@@ -416,6 +416,11 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
 .hidden-btn-message {
   visibility: hidden;
   display: none;
+}
+
+.btn-create {
+  position: absolute;
+  bottom: 10px; 
 }
 
 .modal-header {
