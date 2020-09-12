@@ -109,10 +109,10 @@ export default class ProjectGanttView extends Vue {
 <style scoped>
 
 .diagram-container {
-    position: absolute; 
+    position: absolute;
     top: 100px;
     width: 100%;
-    height: 100%;
+    height: 90%;
 }
 
 </style>

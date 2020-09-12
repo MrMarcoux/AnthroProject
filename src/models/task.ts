@@ -206,6 +206,22 @@ export class Task {
         this.predecessors = this.predecessors.filter(t => t !== task);
     }
 
+    removePredecessors(tasks: Task[]) {
+        tasks.forEach(task => this.removePredecessor(task));
+    }
+
+    removePredecessorRecursively(task: Task) {
+        this.removePredecessor(task);
+
+        this.subTasks.forEach(t => t.removePredecessorRecursively(task));
+    }
+
+    removePredecessorsRecursively(tasks: Task[]) {
+        this.removePredecessors(tasks);
+
+        this.subTasks.forEach(t => t.removePredecessorsRecursively(tasks));
+    }
+
     private addSuccessor(task: Task) {
         if (this.successors.includes(task)) {
             throw new Error('Sucessors is already associated');
@@ -242,6 +258,11 @@ export class Task {
         this.subTasks = this.subTasks.filter(task => task !== subtask);
     }
 
+    removeSubtaskRecursively(subtask: Task) {
+        this.removeSubtask(subtask);
+        this.subTasks.forEach(t => t.removeSubtaskRecursively(subtask));
+    }
+
     removeSkill(skill: Skill) {
         this.requiredSkills = this.requiredSkills.filter(s => s !== skill);
         this.subTasks.forEach(task => task.removeSkill(skill));
@@ -265,5 +286,11 @@ export class Task {
     updatePredecessors(tasks: Task[]) {
         this.predecessors.filter(t => !tasks.includes(t)).forEach(t => this.removePredecessor(t));
         tasks.filter(t => !this.predecessors.includes(t)).forEach(t => this.addPredecessor(t));        
+    }
+
+    toFlatList(): Task[] {
+        const list = this.subTasks.flatMap(t => t.toFlatList());
+        list.push(this);
+        return list;
     }
 }

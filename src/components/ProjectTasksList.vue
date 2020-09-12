@@ -1,6 +1,6 @@
 <template>
   <div class="tasks-list cn">
-    <TaskListElement v-on:task-clicked="emitTaskChosen($event)" :checkmarks="true" ref="taskElem" :multiple="false" :task="task" v-for="task in this.tasks" :key="task" />
+    <TaskListElement v-on:task-clicked="emitTaskChosen($event)" v-on:task-delete-requested="deleteTask($event)" :checkmarks="true" ref="taskElem" :multiple="false" :task="task" v-for="task in this.tasks" :key="task" />
     <button type="button" class="btn btn-info btn-lg btn-create" v-on:click="newTaskWindow()">
       <span>
         <b>+</b>
@@ -55,6 +55,12 @@ export default class ProjectTasksList extends Vue {
     }
   }
 
+  deleteTask(task: TaskModel) {
+    this.$emit('task-deleted', task);
+    this.project.removeTask(task);
+    this.tasks = this.project.tasks;
+  }
+
   public resetSelection() {
     if (this.$refs.taskElem === undefined) {
       return;
@@ -71,6 +77,7 @@ export default class ProjectTasksList extends Vue {
 
   addTask(task: TaskModel) {
     this.project.addTask(task);
+
   }
 }
 </script>

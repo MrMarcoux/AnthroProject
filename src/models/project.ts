@@ -72,8 +72,16 @@ export class Project {
     }
 
     removeTask(task: Task) {
-        //First need to delete all leaf nodes
-        //In deletion, loop through all task and delete from pre and succ
+        const flatList = task.toFlatList();
         
+        for (const rootTask of this.tasks) {
+            rootTask.removePredecessorsRecursively(flatList);
+        }
+
+        this.tasks = this.tasks.filter(t => t !== task);
+        
+        for (const rootTask of this.tasks) {            
+            rootTask.removeSubtask(task);
+        }
     }
 }

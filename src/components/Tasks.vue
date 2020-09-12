@@ -4,7 +4,7 @@
         <TaskEditing :task="focusedTask" v-on:dismiss="sidebarDismissed()"/>
     </nav>
     <div class="main-content">
-        <ProjectTasksList ref="taskList" :project="project" v-on:task-focused="taskEditMenu($event)" />
+        <ProjectTasksList ref="taskList" :project="project" v-on:task-focused="taskEditMenu($event)" v-on:task-deleted="taskDeleted($event)" />
     </div>
   </div>
 </template>
@@ -48,6 +48,13 @@ export default class Tasks extends Vue {
     } else {
       $('.sidebar').removeClass('active');
       this.focusedTask = task;
+    }
+  }
+
+  taskDeleted(task: TaskModel) {
+    if (this.focusedTask === task) { 
+      (this.$refs.taskList as ProjectTasksList).resetSelection();
+      $('.sidebar').removeClass('active');  
     }
   }
 

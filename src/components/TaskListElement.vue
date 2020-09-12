@@ -6,18 +6,21 @@
           <font-awesome-icon v-show="!expanded" :icon="['fas', 'chevron-down']"/>
           <font-awesome-icon v-show="expanded" :icon="['fas', 'chevron-up']"/>
         </button>
+        <button v-bind:class="{barred: task.completed && checkmarks}" v-on:click="toggleSelectedTask(task)" class="btn center-btn">
+          {{ this.task.name }}
+        </button>
         <button v-show="checkmarks" v-on:click="toggleTaskCompletion()" class="btn check-btn" title="Mark as completed" v-bind:class="{unchecked: !this.task.completed, checked: this.task.completed}" :id="`check${this.task.uuid.replace('-', '')}`">
           <font-awesome-icon :icon="['fas', 'check']"/> 
         </button>
-        <button v-bind:class="{barred: task.completed && checkmarks}" v-on:click="toggleSelectedTask(task)" class="btn center-btn">
-          {{ this.task.name }}
+        <button v-show="checkmarks" v-on:click="taskDeleteRequested(task)" class=" btn icon" title="Delete this task" :id="`del${this.task.uuid.replace('-', '')}`">
+          <font-awesome-icon :icon="['fas', 'trash']"/>
         </button>
       </h5>
     </div>
     <div :id="`collapse${this.task.uuid.replace('-', '')}`" v-show="this.task.subTasks.length > 0" class="collapse" :aria-labelledby="`heading${this.task.uuid.replace('-', '')}`">
       <div class="card-body">
         <div v-for="subtask in this.task.subTasks" :key="subtask">
-          <TaskListElement v-on:task-clicked="toggleSelectedTask($event)" ref="taskElem" :checkmarks="checkmarks" :multiple="multiple" :task="subtask" />
+          <TaskListElement v-on:task-clicked="toggleSelectedTask($event)" v-on:task-delete-requested="taskDeleteRequested($event)" ref="taskElem" :checkmarks="checkmarks" :multiple="multiple" :task="subtask" />
         </div>
       </div>
     </div>
@@ -66,6 +69,10 @@ export default class TaskListElement extends Vue {
     this.$emit('task-clicked', task);
   }
 
+  taskDeleteRequested(task: TaskModel) {
+    this.$emit('task-delete-requested', task);
+  }
+
   setActivationFor(task: TaskModel | null) {
     this.selected = (this.task === task);
 
@@ -101,6 +108,17 @@ export default class TaskListElement extends Vue {
 </script>
 
 <style scoped>
+
+.icon {
+  float: left;
+}
+
+.icon:hover {
+  opacity: 75%;
+}
+
+
+
 .panel-heading {
   background-color: rgb(43, 44, 44);
   border-color: black;
@@ -183,4 +201,7 @@ li {
   text-decoration: line-through;
   opacity: 45%;
 }
+
+
+
 </style>
