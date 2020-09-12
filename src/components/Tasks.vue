@@ -36,7 +36,7 @@ export default class Tasks extends Vue {
 
   constructor() {
     super();
-    this.focusedTask = null;
+    this.focusedTask = this.project.tasks.length > 0 ? this.project.tasks[0] : null;
   }
 
   taskEditMenu(task: TaskModel) {

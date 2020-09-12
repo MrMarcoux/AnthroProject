@@ -70,4 +70,10 @@ export class Project {
 
         this.tasks.forEach(task => task.removeMember(member));
     }
+
+    removeTask(task: Task) {
+        //First need to delete all leaf nodes
+        //In deletion, loop through all task and delete from pre and succ
+        
+    }
 }

@@ -32,10 +32,6 @@ import $ from 'jquery';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as bootstrap from 'bootstrap';
 
-/*Vue.config.errorHandler = function (err, vm, info)  {
-  alert('[Global Error Handler]: Error in ' + info + ': ' + err);
-};*/
-
 @Component({
   name: 'TaskListElement'
 })
@@ -112,7 +108,6 @@ export default class TaskListElement extends Vue {
   padding: 10px;
   margin: 0px;
 }
-
 
 .modal-header button {
   color: white;

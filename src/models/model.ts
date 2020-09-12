@@ -32,6 +32,12 @@ export class Model {
 
     public static fromProjectFile(file: any): Model {
         //TODO: Handle serialization here
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 5);
+        const farFutureDate = new Date();
+        farFutureDate.setDate(farFutureDate.getDate() + 5);
+
+
         const model = new Model();
         model.name = file.name;
 
@@ -40,9 +46,9 @@ export class Model {
                        new Task(uuid(), 'task 2', 'write me', new Date(), new Date(), 5),
                        new Task(uuid(), 'task 3', 'write me', new Date(), new Date(), 5)];
 
-        tasks[0].subTasks = [new Task(uuid(), 'task 4', 'write me', new Date(), new Date(), 5),
-                          new Task(uuid(), 'task 5', 'write me', new Date(), new Date(), 5),
-                          new Task(uuid(), 'task 6', 'write me', new Date(), new Date(), 5)];
+        tasks[0].subTasks = [new Task(uuid(), 'task 4', 'write me', futureDate, farFutureDate, 5),
+                          new Task(uuid(), 'task 5', 'write me', new Date(), futureDate, 5),
+                          new Task(uuid(), 'task 6', 'write me', new Date(), futureDate, 5)];
 
         tasks[0].requiredSkills.push(new Skill('C++', 5));
         tasks[0].requiredSkills.push(new Skill('C#', 5));
@@ -65,8 +71,7 @@ export class Model {
         model.members[0].skills.push(new Skill('C#', 5));
         model.members[0].skills.push(new Skill('Assembly', 5));
         model.members[0].skills.push(new Skill('Rust', 5));
-        const futureDate = new Date();
-        futureDate.setDate(futureDate.getDate() + 5);
+
 
         //Member with only upcoming skills
         model.members[1].upcomingSkills.push(new UpcomingSkill('C++', 5, futureDate));

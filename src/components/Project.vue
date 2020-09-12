@@ -23,7 +23,7 @@
         <li class="nav-item">
           <a class="nav-link" v-on:click="switchView('tasks')" id="tasksTab" href="#">Tasks</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-on:click="reloadGantt()">
           <a class="nav-link" v-on:click="switchView('gantt')" id="ganttTab" href="#">Gantt diagram</a>
         </li>
       </ul>
@@ -87,7 +87,7 @@
         <Tasks :project="project" />
       </div>
       <div v-show="activeSection == 'gantt'">
-
+        <ProjectGanttView ref="ganttView" :project="project" />
       </div>
     </div>
     <div class="modal fade" id="editNameWindow" tabindex="-1" role="dialog" aria-labelledby="editNameWindowCenterTitle" aria-hidden="true">
@@ -152,11 +152,12 @@
 <script lang="ts">
 /*
 TODO:
-  - task deletion --> Might have to take care of inter-dependencies
+  - task deletion --> Will have to take care of inter-dependencies
 */
 import TeamSelectorModal from './TeamSelectorModal.vue';
 import MemberSelectorModal from './MemberSelectorModal.vue';
 import Tasks from './Tasks.vue';
+import ProjectGanttView from './ProjectGanttView.vue';
 import { Component, Vue } from 'vue-property-decorator';
 import { Project as  ProjectModel } from '@/models/project';
 import { Team as TeamModel } from '@/models/team';
@@ -171,7 +172,8 @@ import * as bootstrap from 'bootstrap';
   components: {
     TeamSelectorModal,
     MemberSelectorModal,
-    Tasks
+    Tasks,
+    ProjectGanttView
   }
 })
 export default class Project extends Vue {
@@ -185,6 +187,7 @@ export default class Project extends Vue {
   teamColor: string;
   teamName: string;
   projectHasTeam: boolean;
+
 
   constructor() {
     super();
@@ -293,6 +296,10 @@ export default class Project extends Vue {
 
   addOutsiders(members: MemberModel[]) {
     this.project.outsiders.push(...members);
+  }
+
+  reloadGantt() {    
+    (this.$refs.ganttView as ProjectGanttView).refreshGantt();
   }
   
 }
