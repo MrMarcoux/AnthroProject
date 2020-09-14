@@ -13,7 +13,11 @@
           <div class="col-10">                    
             <h2> {{ this.$store.state.model.getName() }} </h2>
           </div>
-          <div class="col-1"></div>
+          <div class="col-1">
+            <h2 class="text-right go-back icon" v-on:click="$store.dispatch('saveFile')">
+              <font-awesome-icon :icon="['fas', 'save']" />
+            </h2>
+          </div>
         </div>
       </div>
       <ul class="nav nav-tabs">
@@ -431,6 +435,11 @@ input[type=date] {
 
 .modal-header button {
   color: white;
+}
+
+.icon:hover {
+  cursor: pointer;
+  opacity: 75%;
 }
 
 </style>

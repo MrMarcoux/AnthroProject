@@ -1,7 +1,19 @@
 <template>
   <div class="model cn">
     <div class="inner">
-      <h2> {{ this.$store.state.model.getName() }} </h2>
+      <div class="app-header container-fluid">
+        <div class="row">
+          <div class="col-1"></div>
+          <div class="col-10">                    
+            <h2> {{ this.$store.state.model.getName() }} </h2>
+          </div>
+          <div class="col-1">
+            <h2 class="text-right go-back icon" v-on:click="$store.dispatch('saveFile')">
+              <font-awesome-icon :icon="['fas', 'save']" />
+            </h2>
+          </div>
+        </div>
+      </div>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link active" v-on:click="switchView('projects')" id="projectsTab" href="#">Projects</a>
@@ -395,5 +407,10 @@ button:hover .hidden-btn-message, button.hover .hidden-btn-message {
 
 .modal-header button {
   color: white;
+}
+
+.icon:hover {
+  cursor: pointer;
+  opacity: 75%;
 }
 </style>

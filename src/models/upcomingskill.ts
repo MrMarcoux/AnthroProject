@@ -11,23 +11,32 @@ export class UpcomingSkill extends Skill {
         this.aquisitionDate = date;
     }
 
-    /**getter */
     public getAquisitionDate(): Date {
         return this.aquisitionDate;
     }
 
-    /**
-     * @returns true if the skill is aquired
-     */
-    isAcquired(): boolean{
-
+    public isAcquired(): boolean {
         const today = new Date();
         
         return (this.aquisitionDate.getTime() <= today.getTime());
     }
 
-    formattedDate(): string {
+    public formattedDate(): string {
         return DateFormatter.formatDateForDisplay(this.aquisitionDate);
     }
 
+    public asSerializedData(): any {
+        return {
+            name: this.name,
+            level: this.level,
+            acquisitionDate: DateFormatter.formatDateForDisplay(this.aquisitionDate)
+        }
+    }
+    
+    public static fromUnparsedData(data: any): UpcomingSkill {
+        const date = new Date(Date.parse(data.date as string) + 1);
+        date.setDate(date.getDate() + 1);
+
+        return new UpcomingSkill(data.name, data.level, date);
+    }
 }

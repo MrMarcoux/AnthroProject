@@ -11,9 +11,9 @@ export class Member {
     colorCode: string;
     availableWeeklyHours: number;
     availableDailyHours: number;
-    tasks: Task[];
-    teams: Team[];
-    skills: Skill[];
+    tasks: Task[]; //TODO: Remove
+    teams: Team[]; //TODO: Remove
+    skills: Skill[]; 
     upcomingSkills: UpcomingSkill[];
 
     constructor(uuid: string, name: string, description: string, colorCode: string, 
@@ -98,5 +98,28 @@ export class Member {
         this.teams.push(team);
 
         team.addMember(this);
+    }
+
+    public asSerializedData(): any {
+        return {
+            uuid: this.uuid,
+            name: this.name,
+            description: this.description,
+            colorCode: this.colorCode,
+            availableDailyHours: this.availableDailyHours,
+            availableWeeklyHours: this.availableWeeklyHours,
+            skills: this.skills.map(skill => skill.asSerializedData()),
+            upcomingSkills: this.upcomingSkills.map(skill => skill.asSerializedData())
+        };
+    }
+
+    public static fromUnparsedData(data: any): Member {
+        return new Member(data.uuid, data.name, 
+                          data.description,
+                          data.colorCode,
+                          data.availableDailyHours,
+                          data.availableWeeklyHours,
+                          data.skills.map((s: any) => Skill.fromUnparsedData(s)),
+                          data.upcomingSkills.map((s: any) => UpcomingSkill.fromUnparsedData(s)));
     }
 }

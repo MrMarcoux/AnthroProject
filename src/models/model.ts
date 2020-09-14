@@ -11,7 +11,7 @@ export class Model {
     teams: Team[];
     members: Member[];
     availableSkills: string[]
-    private name: string;
+    name: string;
 
     constructor() {
         this.projects = [];
@@ -25,24 +25,63 @@ export class Model {
         return this.name.split('.')[0];
     }
 
-    public asProjectFile(): any {
-        //TODO: Handle serialization here
-        return {};
+    public asProjectFile(): string {
+        const serializedData = {
+            projects: this.projects.map(project => project.asSerializedData()),
+            teams: this.teams.map(team => team.asSerializedData()),
+            members: this.members.map(member => member.asSerializedData()),
+            availableSkills: this.availableSkills
+        };
+
+        return JSON.stringify(serializedData);
+    }
+
+    public parseData(data: any): void {
+        //First, flat deserialization
+        //Link teams to projects
+        //Link predecessors and successors
+        this.availableSkills = data.availableSkills;
+        
+        for (const memberData of data.members) {
+            this.members.push(Member.fromUnparsedData(memberData));
+        }
+
+        for (const teamData of data.teams) {
+            this.teams.push(Team.fromUnparsedData(this.members, teamData));
+        }
+
+        for (const projectData of data.projects) {
+            this.projects.push(Project.fromUnparsedData(this.members, this.teams, projectData));
+        }
     }
 
     public static fromProjectFile(file: any): Model {
         //TODO: Handle serialization here
+
+        //First, flat deserialization
+        //Link teams to projects
+        //Then, link members to teams
+        //Link predecessors and successors
+
+        const reader = new FileReader();
         const futureDate = new Date();
         futureDate.setDate(futureDate.getDate() + 5);
         const farFutureDate = new Date();
         farFutureDate.setDate(farFutureDate.getDate() + 5);
 
-
         const model = new Model();
+
+        reader.onload = function(event) {
+            const data = JSON.parse(event.target?.result as string);
+            model.parseData(data);
+        }
+
+        reader.readAsText(file);
+
         model.name = file.name;
 
         //TODO: Replace dummy values with real deserialized values    
-        const tasks = [new Task(uuid(), 'task 1', 'write me', new Date(), new Date(), 5),
+/*        const tasks = [new Task(uuid(), 'task 1', 'write me', new Date(), new Date(), 5),
                        new Task(uuid(), 'task 2', 'write me', new Date(), new Date(), 5),
                        new Task(uuid(), 'task 3', 'write me', new Date(), new Date(), 5)];
 
@@ -90,7 +129,7 @@ export class Model {
         project.outsiders = model.members;
         model.projects.push(project);
         model.projects.push(new Project(uuid(), 'project 2', ' Lorem ipsum dolor sit amet', 'FF00FF'));
-        model.projects.push(new Project(uuid(), 'project 3', ' oof', '00FFFF'));
+        model.projects.push(new Project(uuid(), 'project 3', ' oof', '00FFFF'));*/
         return model;
     }
 

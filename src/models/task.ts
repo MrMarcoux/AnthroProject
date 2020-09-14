@@ -4,6 +4,7 @@ import { Member } from './member';
 import { UpcomingSkill } from './upcomingskill';
 import { Team } from './team';
 import { DateFormatter } from './DateFormatter';
+import { faTasks } from '@fortawesome/free-solid-svg-icons';
 
 export class Task {
     readonly uuid: string;
@@ -292,5 +293,51 @@ export class Task {
         const list = this.subTasks.flatMap(t => t.toFlatList());
         list.push(this);
         return list;
+    }
+
+    public asSerializedData(): any {
+        return {
+            uuid: this.uuid,
+            name: this.name,
+            description: this.description,
+            start: DateFormatter.formatDateForDisplay(this.start),
+            end: DateFormatter.formatDateForDisplay(this.end),
+            duration: this.duration,
+            completed: this.completed,
+            completionPercent: this.completionPercent,
+            subTasks: this.subTasks.map(task => task.asSerializedData()),
+            predecessors: this.predecessors.map(task => task.uuid),
+            successors: this.successors.map(task => task.uuid),
+            assignees: this.assignees.map(assignee => assignee.uuid),
+            requiredSkills: this.requiredSkills.map(skill => skill.asSerializedData())
+        };
+    }
+
+    public static fromUnparsedData(parentProject: Project, availableMembers: Member[], data: any): Task {
+        const endDate = new Date(Date.parse(data.end as string) + 1);
+        endDate.setDate(endDate.getDate() + 1);
+        
+        const startDate = new Date(Date.parse(data.start as string) + 1);
+        startDate.setDate(startDate.getDate() + 1);
+
+        const task = new Task(data.uuid, data.name, data.description, startDate, endDate, 0, parentProject);
+        task.completionPercent = data.completionPercent;
+        task.completed = data.completed;
+        task.requiredSkills = data.requiredSkills.map((s: any) => Skill.fromUnparsedData(s));
+        task.assignees = availableMembers.filter(m => data.assignees.includes(m.uuid));
+        task.subTasks = data.subTasks.map((t: any) => Task.fromUnparsedData(parentProject, availableMembers, t));
+
+        return task;
+    }
+
+    public parseLocusesFromData(availableTasks: Task[], data: any) {
+        this.predecessors = availableTasks.filter(t => data.predecessors.includes(t.uuid));
+        this.successors = availableTasks.filter(t => data.predecessors.includes(t.uuid));
+        
+        for (const subTaskData of data.subTasks) {
+            const subTask = this.subTasks.find(s => s.uuid === subTaskData.uuid);
+
+            subTask?.parseLocusesFromData(availableTasks, subTaskData);
+        }
     }
 }

@@ -39,4 +39,28 @@ export class Team {
 
         return false;
     }
+
+    public asSerializedData() {
+        return {
+            uuid: this.uuid,
+            name: this.name,
+            description: this.description,
+            colorCode: this.colorCode,
+            members: this.members.map(member => member.uuid)
+        };
+    }
+
+    public static fromUnparsedData(availableMembers: Member[], data: any): Team {
+        const team = new Team(data.uuid, data.name, data.colorCode, data.description);
+        
+        for (const memberUuid of data.members) {
+            const member = availableMembers.find(member => member.uuid === memberUuid);
+            
+            if (member) {
+                team.members.push(member);
+            }
+        }
+
+        return team;
+    }
 }
